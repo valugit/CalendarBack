@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { User } from "./user.entity"
-import { Game } from "./game.entity"
+import { User } from "../users/users.entity";
+import { Game } from "../games/games.entity";
 
 @Entity({ name: 'seance' })
 export class Seance {
@@ -12,7 +12,7 @@ export class Seance {
     gamemaster: User;
 
     @ManyToOne(type => Game, game => game.id)
-    game: Game;
+    seance_game: Game;
 
     @ManyToMany(type => User)
     @JoinTable()

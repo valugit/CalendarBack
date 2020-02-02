@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Seance } from './seance.entity';
+import { Seance } from '../seances/seances.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -26,5 +26,5 @@ export class User {
     role: string;
 
     @OneToMany(type=>Seance, seance => seance.id)
-    seances: Seance[];
+    gm_seances: Seance[];
 }
