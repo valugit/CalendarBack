@@ -83,15 +83,11 @@ class ConfigService {
 
 const configService = new ConfigService(process.env)
 .ensureValues([
-    'POSTGRES_HOST',
-    'POSTGRES_PORT',
-    'POSTGRES_USER',
-    'POSTGRES_PASSWORD',
-    'POSTGRES_DATABASE'
-]);
-
-const configHerokuService = new ConfigService(process.env)
-.ensureValues([
+    // 'POSTGRES_HOST',
+    // 'POSTGRES_PORT',
+    // 'POSTGRES_USER',
+    // 'POSTGRES_PASSWORD',
+    // 'POSTGRES_DATABASE'
     'DATABASE_URL'
 ]);
 
@@ -100,4 +96,4 @@ const secretKey = new ConfigService(process.env)
     'SECRET_KEY'
 ]);
 
-export { configService, configHerokuService };
+export { configService };
