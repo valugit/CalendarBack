@@ -1,31 +1,39 @@
-import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth/auth.service';
+import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import { AuthService } from './auth/auth.service'
+import { Roles } from './roles/roles.decorator'
 
 @Controller()
 export class AppController {
-    constructor(private readonly authService: AuthService) {}
+	constructor(private readonly authService: AuthService) {}
 
-    @UseGuards(AuthGuard('local'))
-    @Post('auth/login')
-    async login(@Request() req) {
-        return this.authService.login(req.user);
-    }
+	@Post('auth/register')
+	async register(@Request() req) {
+		return this.authService.register(req.body)
+	}
 
-    @UseGuards(AuthGuard('jwt'))
-    @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
-    }
+	@UseGuards(AuthGuard('local'))
+	@Post('auth/login')
+	async login(@Request() req) {
+		return this.authService.login(req.user)
+	}
 
-    // Routes for normal user :
-    // get all sellers
-    // get sellers dispo
-    // get users reservation
-    // take a reservation
+	@UseGuards(AuthGuard('jwt'))
+	@Get('profile')
+	getProfile(@Request() req) {
+		return req.user
+	}
 
-    // Routes for seller :
-    // get all dispo
-    // add disponibility
-    // remove disponibility
+	// @Roles(admin)
+
+	// Routes for normal user :
+	// get all sellers
+	// get sellers dispo
+	// get users reservation
+	// take a reservation
+
+	// Routes for seller :
+	// get all dispo
+	// add disponibility
+	// remove disponibility
 }

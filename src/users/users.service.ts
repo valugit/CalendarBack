@@ -1,24 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './users.entity';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { User } from './users.entity'
+import * as crypto from 'crypto';
 
-export type Users = any;
+export type Users = any
 
 @Injectable()
 export class UsersService {
-    private readonly users: User[];
+	private readonly users: User[]
 
-    constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>
-    ) {}
+	constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-    findOne(username: string): Promise<User[]> {
-        return this.userRepository.find({where: {username: username}});
-    }
+	async create(info: any) {
+        const user = new User()
 
-    findAll(): Promise<User[]> {
-        return this.userRepository.find();
-    }
+		user.username = info.username
+        user.email = info.email
+        user.password = crypto.createHmac('sha256', info.password).digest('hex')
+        user.salt = 'salty'
+        user.role = info.role
+		user.birthdate = info.birthdate
+
+		await this.userRepository.save(user)
+	}
+
+	findOne(username: string): Promise<User[]> {
+		return this.userRepository.find({ where: { username: username } })
+	}
+
+	findAll(): Promise<User[]> {
+		return this.userRepository.find()
+	}
 }
