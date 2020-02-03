@@ -30,6 +30,26 @@ class ConfigService {
     }
 
     public getTypeOrmConfig(): TypeOrmModuleOptions {
+        if (this.getValue('DATABASE_URL')) {
+            return{
+                type: 'postgres',
+                url: this.getValue('DATABASE_URL'),
+
+                entities: ['dist/**/*.entity{.ts,.js}'],
+        
+                synchronize: true,
+        
+                migrationsTableName: 'migration',
+        
+                migrations: ['migration/*.ts'],
+        
+                cli: {
+                    migrationsDir: 'migration',
+                },
+        
+                ssl: this.isProduction(),
+            };
+        }
         return {
         type: 'postgres',
 
@@ -61,18 +81,18 @@ class ConfigService {
 
 }
 
-const configService = new ConfigService(process.env)
-.ensureValues([
-    'POSTGRES_HOST',
-    'POSTGRES_PORT',
-    'POSTGRES_USER',
-    'POSTGRES_PASSWORD',
-    'POSTGRES_DATABASE'
-]);
+// const configService = new ConfigService(process.env)
+// .ensureValues([
+//     'POSTGRES_HOST',
+//     'POSTGRES_PORT',
+//     'POSTGRES_USER',
+//     'POSTGRES_PASSWORD',
+//     'POSTGRES_DATABASE'
+// ]);
 
-const secretKey = new ConfigService(process.env)
-.ensureValues([
-    'SECRET_KEY'
-]);
+// const secretKey = new ConfigService(process.env)
+// .ensureValues([
+//     'SECRET_KEY'
+// ]);
 
-export { configService };
+// export { configService };
