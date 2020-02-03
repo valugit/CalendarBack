@@ -12,7 +12,7 @@
 		"start:dev": "nest start --watch",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/src/main.js",
-		"prestart:prod": "npm install",
+		"prestart:prod": "npm build",
 		"postinstall": "npm run prestart:prod",
 		"lint": "tslint -p tsconfig.json -c tslint.json",
 		"test": "jest",
