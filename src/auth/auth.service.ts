@@ -8,7 +8,7 @@ export class AuthService {
 	constructor(private readonly usersService: UsersService, private readonly jwtService: JwtService) {}
 
 	async validateUser(username: string, pass: string): Promise<any> {
-		const user = await this.usersService.findOne(username);
+		const user = await this.usersService.checkLogin(username);
 
 		if (user && crypto.createHmac('sha256', pass).digest('hex') === user[0].password) {
 			const { password, ...result } = user[0];
