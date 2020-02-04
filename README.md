@@ -34,6 +34,12 @@
 $ npm install
 ```
 
+## Heroku
+
+```bash
+$ git push heroku master
+```
+
 ## Running the app
 
 ```bash
