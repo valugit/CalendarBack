@@ -2,11 +2,12 @@ import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 import { Roles } from './roles/roles.decorator';
+import { UsersService } from './users/users.service';
 // import { Roles } from './roles/roles.decorator';
 
 @Controller()
 export class AppController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
 
 	@Post('auth/register')
 	async register(@Request() req) {
@@ -30,12 +31,12 @@ export class AppController {
     // Routes for normal user :
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
-    @Get('sellers')
-    getSellers(@Request() req) {
-        // get all sellers
-        return
-    }
-	// get sellers disponibilities
+    @Get('gamemasters')
+	getGms(@Request() req) {
+		// get all gms
+		return this.usersService.findGms();
+	}
+	// get gms disponibilities
 	// get users reservation
 	// take a reservation
 

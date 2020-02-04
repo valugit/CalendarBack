@@ -33,10 +33,10 @@ export class AuthService {
 			};
 		}
 		// TODO: check email and maj/min/symbol
-		if (typeof user.username !== 'string' || (user.username.length < 5 || user.username.length > 255)) {
+		if (typeof user.username !== 'string' || (user.username.length < 2 || user.username.length > 255)) {
 			return {
 				status_code: 400,
-				error: 'The username must be between 5 and 255 characters.'
+				error: 'The username must be between 2 and 255 characters.'
 			};
 		}
 		if (typeof user.password !== 'string' || (user.password.length < 8 || user.password.length > 255)) {

@@ -32,4 +32,8 @@ export class UsersService {
 	findAll(): Promise<User[]> {
 		return this.userRepository.find();
 	}
+
+	findGms(): Promise<User[]> {
+		return this.userRepository.find({select: ['id', 'username'], where: {role: 'gamemaster'}});
+	}
 }
