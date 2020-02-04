@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Seance } from './seances.entity';
 
 @Injectable()
-export class SeanceService {
+export class SeancesService {
 	constructor(
     @InjectRepository(Seance)
     private readonly seanceRepository: Repository<Seance>,
@@ -12,5 +12,9 @@ export class SeanceService {
 
 	findAll(): Promise<Seance[]> {
 		return this.seanceRepository.find();
-	}
+    }
+
+    findGmSeances(id: string): Promise<Seance[]> {
+        return this.seanceRepository.find({where: {gamemaster: id}})
+    }
 }

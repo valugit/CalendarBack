@@ -1,13 +1,18 @@
-import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Request, Get, Post, UseGuards, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 import { Roles } from './roles/roles.decorator';
 import { UsersService } from './users/users.service';
+import { SeancesService } from './seances/seances.service';
 // import { Roles } from './roles/roles.decorator';
 
 @Controller()
 export class AppController {
-	constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly usersService: UsersService,
+        private readonly seancesService: SeancesService
+    ) {}
 
 	@Post('auth/register')
 	async register(@Request() req) {
@@ -31,12 +36,19 @@ export class AppController {
     // Routes for normal user :
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
-    @Get('gamemasters')
+    @Get('gamemaster/all')
 	getGms(@Request() req) {
 		// get all gms
 		return this.usersService.findGms();
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('player')
+    @Get('gamemaster/:id')
+	getOneGms(@Request() req, @Param() params) {
+        // get gms disponibilities
+		return this.seancesService.findGmSeances(params.id);
 	}
-	// get gms disponibilities
 	// get users reservation
 	// take a reservation
 

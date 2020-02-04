@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
+import { Seance } from '../seances/seances.entity';
 import * as crypto from 'crypto';
 
 export type Users = any
@@ -35,5 +36,5 @@ export class UsersService {
 
 	findGms(): Promise<User[]> {
 		return this.userRepository.find({select: ['id', 'username'], where: {role: 'gamemaster'}});
-	}
+    }
 }

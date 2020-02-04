@@ -32,13 +32,15 @@ export class AuthService {
 				error: 'Some information is missing from the request.'
 			};
 		}
-		// TODO: check email and maj/min/symbol
+		// TODO: check email
+		// TODO: check if user exists
 		if (typeof user.username !== 'string' || (user.username.length < 2 || user.username.length > 255)) {
 			return {
 				status_code: 400,
 				error: 'The username must be between 2 and 255 characters.'
 			};
-		}
+        }
+        // TODO: check uppercase, lowercase and symbol in password
 		if (typeof user.password !== 'string' || (user.password.length < 8 || user.password.length > 255)) {
 			return {
 				status_code: 400,
