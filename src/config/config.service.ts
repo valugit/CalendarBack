@@ -4,96 +4,66 @@ require('dotenv').config();
 
 class ConfigService {
 
-    constructor(private env: { [k: string]: string | undefined }) { }
+	constructor(private env: { [k: string]: string | undefined }) { }
 
-    private getValue(key: string, throwOnMissing = true): string {
-        const value = this.env[key];
-        if (!value && throwOnMissing) {
-        throw new Error(`config error - missing env.${key}`);
-        }
+	private getValue(key: string, throwOnMissing = true): string {
+		const value = this.env[key];
+		if (!value && throwOnMissing) {
+			throw new Error(`config error - missing env.${key}`);
+		}
 
-        return value;
-    }
+		return value;
+	}
 
-    public ensureValues(keys: string[]) {
-        keys.forEach(k => this.getValue(k, true));
-        return this;
-    }
+	public ensureValues(keys: string[]) {
+		keys.forEach(k => this.getValue(k, true));
+		return this;
+	}
 
-    public getPort() {
-        return this.getValue('PORT', true);
-    }
+	public getPort() {
+		return this.getValue('PORT', true);
+	}
 
-    public isProduction() {
-        const mode = this.getValue('MODE', false);
-        return mode != 'DEV';
-    }
+	public isProduction() {
+		const mode = this.getValue('MODE', false);
+		return mode != 'DEV';
+	}
 
-    public getTypeOrmConfig(): TypeOrmModuleOptions {
-        if (this.getValue('DATABASE_URL')) {
-            return{
-                type: 'postgres',
-                url: this.getValue('DATABASE_URL'),
+	public getTypeOrmConfig(): TypeOrmModuleOptions {
+		return{
+			type: 'postgres',
+			url: this.getValue('DATABASE_URL'),
 
-                entities: ['dist/**/*.entity{.ts,.js}'],
-        
-                synchronize: true,
-        
-                migrationsTableName: 'migration',
-        
-                migrations: ['migration/*.ts'],
-        
-                cli: {
-                    migrationsDir: 'migration',
-                },
-        
-                ssl: this.isProduction(),
-            };
-        }
-        return {
-        type: 'postgres',
+			entities: ['dist/**/*.entity{.ts,.js}'],
 
-        host: this.getValue('POSTGRES_HOST'),
-        port: parseInt(this.getValue('POSTGRES_PORT')),
-        username: this.getValue('POSTGRES_USER'),
-        password: this.getValue('POSTGRES_PASSWORD'),
-        database: this.getValue('POSTGRES_DATABASE'),
+			synchronize: true,
 
-        entities: ['dist/**/*.entity{.ts,.js}'],
+			migrationsTableName: 'migration',
 
-        synchronize: true,
+			migrations: ['migration/*.ts'],
 
-        migrationsTableName: 'migration',
+			cli: {
+				migrationsDir: 'migration',
+			},
 
-        migrations: ['migration/*.ts'],
+			ssl: this.isProduction(),
+		};
+	}
 
-        cli: {
-            migrationsDir: 'migration',
-        },
-
-        ssl: this.isProduction(),
-        };
-    }
-
-    public getSecret(): string {
-        return this.getValue('SECRET_KEY');
-    }
+	public getSecret(): string {
+		return this.getValue('SECRET_KEY');
+	}
 
 }
 
 const configService = new ConfigService(process.env)
-.ensureValues([
-    // 'POSTGRES_HOST',
-    // 'POSTGRES_PORT',
-    // 'POSTGRES_USER',
-    // 'POSTGRES_PASSWORD',
-    // 'POSTGRES_DATABASE'
-    'DATABASE_URL'
-]);
+	.ensureValues([
+		'DATABASE_URL'
+	]);
 
 const secretKey = new ConfigService(process.env)
-.ensureValues([
-    'SECRET_KEY'
-]);
+	.ensureValues([
+		'SECRET_KEY'
+	]);
 
 export { configService };

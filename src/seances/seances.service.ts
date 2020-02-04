@@ -5,12 +5,12 @@ import { Seance } from './seances.entity';
 
 @Injectable()
 export class SeanceService {
-  constructor(
+	constructor(
     @InjectRepository(Seance)
     private readonly seanceRepository: Repository<Seance>,
-  ) {}
+	) {}
 
-  findAll(): Promise<Seance[]> {
-    return this.seanceRepository.find();
-  }
+	findAll(): Promise<Seance[]> {
+		return this.seanceRepository.find();
+	}
 }
