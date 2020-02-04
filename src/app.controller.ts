@@ -23,7 +23,7 @@ export class AppController {
 	@UseGuards(AuthGuard('jwt'))
 	@Get('user/profile')
 	getProfile(@Request() req) {
-		return req.user;
+		return this.usersService.findOne(req.user.username);
 	}
 
 	// @Roles('admin')

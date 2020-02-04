@@ -26,7 +26,7 @@ export class UsersService {
 	}
 
 	findOne(username: string): Promise<User[]> {
-		return this.userRepository.find({ where: { username: username } });
+		return this.userRepository.find({select: ['id', 'username', 'email', 'role', 'birthdate'], where: { username: username } });
 	}
 
 	findAll(): Promise<User[]> {
