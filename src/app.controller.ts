@@ -1,34 +1,42 @@
-import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common'
-import { AuthGuard } from '@nestjs/passport'
-import { AuthService } from './auth/auth.service'
-import { Roles } from './roles/roles.decorator'
+import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from './auth/auth.service';
+import { Roles } from './roles/roles.decorator';
+import { UsersService } from './users/users.service';
+// import { Roles } from './roles/roles.decorator';
 
 @Controller()
 export class AppController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
 
 	@Post('auth/register')
 	async register(@Request() req) {
-		return this.authService.register(req.body)
+		return this.authService.register(req.body);
 	}
 
 	@UseGuards(AuthGuard('local'))
 	@Post('auth/login')
 	async login(@Request() req) {
-		return this.authService.login(req.user)
+		return this.authService.login(req.user);
 	}
 
 	@UseGuards(AuthGuard('jwt'))
-	@Get('profile')
+	@Get('user/profile')
 	getProfile(@Request() req) {
-		return req.user
+		return req.user;
 	}
 
-	// @Roles(admin)
+	// @Roles('admin')
 
-	// Routes for normal user :
-	// get all sellers
-	// get sellers dispo
+    // Routes for normal user :
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('player')
+    @Get('gamemasters')
+	getGms(@Request() req) {
+		// get all gms
+		return this.usersService.findGms();
+	}
+	// get gms disponibilities
 	// get users reservation
 	// take a reservation
 
