@@ -5,6 +5,9 @@ declare const module: any;
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+	
+	app.enableCors();
+	
 	let port = process.env.PORT;
 	if (port == null || port == '') {
 		port = '3001';

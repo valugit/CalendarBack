@@ -6,7 +6,8 @@
     "license": "MIT",
     "scripts": {
         "prebuild": "rimraf dist",
-        "build": "nest build --watch --webpack",
+        "build": "nest build",
+        "build:dev": "nest build --watch --webpack",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "nest start",
         "start:dev": "nest start --watch",
