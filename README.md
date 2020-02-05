@@ -47,6 +47,11 @@ Header {Authorization : Bearer <Token>}
 Header {Authorization : Bearer <Token>}
 ```
 
+### GET /game/all
+```
+Header {Authorization : Bearer <Token>}
+```
+
 ### POST /seance/add
 ```
 Header {Authorization : Bearer <Token>}
