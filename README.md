@@ -32,17 +32,17 @@ Sends back a JWT Token
 Header {Authorization : Bearer <Token>}
 ```
 
-### GET /gamemaster/all (unavailable)
+### GET /gamemaster/all
 ```
 Header {Authorization : Bearer <Token>}
 ```
 
-### GET /gamemaster/:id (unavailable)
+### GET /gamemaster/:id
 ```
 Header {Authorization : Bearer <Token>}
 ```
 
-### POST /seance/add (unavailable)
+### POST /seance/add
 ```
 Header {Authorization : Bearer <Token>}
 ```
@@ -50,10 +50,12 @@ Header {Authorization : Bearer <Token>}
 {
 	"gamemaster": 6,
 	"game": 1,
-	"date_start": ,
-	"date_end": 
+	"date_start": new Datetime(),
+	"date_end": new Datetime()
 }
 ```
+
+
 ## Installation
 
 ```bash
