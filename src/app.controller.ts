@@ -6,13 +6,15 @@ import { UsersService } from './users/users.service';
 import { UserDto } from './users/users-create.dto';
 import { SeancesService } from './seances/seances.service';
 import { SeanceDto } from './seances/seances-create.dto';
+import { GamesService } from './games/games.service';
 
 @Controller()
 export class AppController {
     constructor(
         private readonly authService: AuthService,
         private readonly usersService: UsersService,
-        private readonly seancesService: SeancesService
+        private readonly seancesService: SeancesService,
+        private readonly gamesService: GamesService
     ) {}
 
     @Post('auth/register')
@@ -40,18 +42,39 @@ export class AppController {
     @Get('gamemaster/all')
 	getGms(@Request() req) {
 		// get all gms
-		return this.usersService.findGms();
+        return this.usersService.findGms();
+        // TODO: add next seances planned in 7 following days
     }
 
-    // get users reservation
-    // take a reservation
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('player')
+    @Get('user/reservation')
+	getReservations(@Request() req) {
+		// get users reservation
+		// TODO: return this.usersService.findRes();
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('player')
+    @Post('seance/join')
+	joinSeance(@Request() req) {
+		// take a reservation
+		// TODO: return
+    }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
-	getOneGms(@Request() req, @Param() params) {
+	getOneGms(@Param() params) {
         // get gms disponibilities
 		return this.seancesService.findGmSeances(params.id);
-	}
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('game/all')
+	getGames(@Request() req, @Param() params) {
+        // get all games
+		return this.gamesService.findAll();
+    }
 
     // Routes for seller :
     @UseGuards(AuthGuard('jwt'))
@@ -60,6 +83,13 @@ export class AppController {
 	async addSeance(@Body() body: SeanceDto) {
         // add disponibility
 		return this.seancesService.create(body);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('gamemaster')
+	@Post('seance/remove')
+	async removeSeance(@Body() body) {
+        // remove gamemasters's own disponibility
+		// TODO: return this.seancesService.delete(body);
 	}
-	// remove disponibility
 }

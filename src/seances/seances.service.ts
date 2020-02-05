@@ -41,6 +41,6 @@ export class SeancesService {
     }
 
     findGmSeances(id: string): Promise<Seance[]> {
-        return this.seanceRepository.find({where: {gamemaster: id}})
+        return this.seanceRepository.find({relations: ['seance_game'], where: {gamemaster: id}})
     }
 }

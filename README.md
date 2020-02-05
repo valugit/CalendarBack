@@ -32,12 +32,22 @@ Sends back a JWT Token
 Header {Authorization : Bearer <Token>}
 ```
 
+### GET /user/reservation (unavailable)
+```
+Header {Authorization : Bearer <Token>}
+```
+
 ### GET /gamemaster/all
 ```
 Header {Authorization : Bearer <Token>}
 ```
 
 ### GET /gamemaster/:id
+```
+Header {Authorization : Bearer <Token>}
+```
+
+### GET /game/all
 ```
 Header {Authorization : Bearer <Token>}
 ```
@@ -56,6 +66,25 @@ Header {Authorization : Bearer <Token>}
 }
 ```
 
+### POST /seance/join (unavailable)
+```
+Header {Authorization : Bearer <Token>}
+```
+```json
+{
+    "id_seance": 1,
+}
+```
+
+### ??? /seance/delete (unavailable)
+```
+Header {Authorization : Bearer <Token>}
+```
+```json
+{
+    "id_seance": 1
+}
+```
 
 ## Installation
 
