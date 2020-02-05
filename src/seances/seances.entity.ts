@@ -8,6 +8,9 @@ export class Seance {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ type: 'varchar', length: 1024 })
+    title: string;
+
     @ManyToOne(type => User, user => user.id)
     gamemaster: User;
 

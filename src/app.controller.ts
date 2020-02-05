@@ -1,10 +1,11 @@
-import { Controller, Request, Get, Post, UseGuards, Body } from '@nestjs/common';
+import { Controller, Request, Get, Post, UseGuards, Body, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 import { Roles } from './roles/roles.decorator';
 import { UsersService } from './users/users.service';
-import { SeancesService } from './seances/seances.service';
 import { UserDto } from './users/users-create.dto';
+import { SeancesService } from './seances/seances.service';
+import { SeanceDto } from './seances/seances-create.dto';
 
 @Controller()
 export class AppController {
@@ -46,16 +47,19 @@ export class AppController {
     @Get('gamemaster/:id')
 	getOneGms(@Request() req, @Param() params) {
         // get gms disponibilities
+        console.log(new Date());
 		return this.seancesService.findGmSeances(params.id);
 	}
 	// get users reservation
 	// take a reservation
 
-	// Routes for seller :
+    // Routes for seller :
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('gamemaster')
 	@Post('seance/add')
-	async addSeance(@Request() req) {
+	async addSeance(@Body() body: SeanceDto) {
         // add disponibility
-		return this.seancesService.create(req.body);
+		return this.seancesService.create(body);
 	}
 	// remove disponibility
 }

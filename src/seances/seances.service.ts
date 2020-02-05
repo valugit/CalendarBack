@@ -13,13 +13,25 @@ export class SeancesService {
     async create(info: any) {
 		const seance = new Seance();
 
-		seance.gamemaster = info.gamemaster;
-		// seance.email = info.email;
-		// seance.salt = 'salty';
-		// seance.role = info.role;
-		// seance.birthdate = info.birthdate;
+		seance.title = info.title;
+        seance.gamemaster = info.gamemaster;
+        seance.seance_game = info.seance_game;
+        seance.mature = true;
 
-		// await this.seanceRepository.save(seance);
+        if (!info.mature) {
+            seance.mature = false;
+        }
+
+        seance.date_start = info.date_start;
+        seance.date_end = info.date_end;
+
+        await this.seanceRepository.save(seance)
+        .then(()=> {
+            return {status: 201};
+        })
+        .catch(err => {
+            return {status: 400, message: err};
+        })
 	}
 
 	findAll(): Promise<Seance[]> {
