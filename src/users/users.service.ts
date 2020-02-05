@@ -13,17 +13,22 @@ export class UsersService {
 
 	constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-	async create(info: any) {
+	async create(info: any): Promise<any>{
 		const user = new User();
 
 		user.username = info.username;
 		user.email = info.email;
 		user.password = crypto.createHmac('sha256', info.password).digest('hex');
-		user.salt = 'salty';
 		user.role = info.role;
         user.birthdate = info.birthdate;
 
-        await this.userRepository.save(user);
+        var check;
+
+        await this.userRepository.save(user)
+        .catch(err => {
+            check = err;
+        })
+        return check;
 	}
 
 	findOne(username: string): Promise<User[]> {
@@ -37,7 +42,7 @@ export class UsersService {
     async exists(param: {key: string, value: string}): Promise<Boolean> {
         const item = await this.userRepository
             .createQueryBuilder("user")
-            .where(`"${param.key}" = "${param.value}"`)
+            .andWhere(`"${param.key}" = "${param.key}"`)
             .getCount();
 
         console.log(`"${param.key}" = "${param.value}"`)

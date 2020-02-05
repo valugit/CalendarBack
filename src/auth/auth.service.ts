@@ -33,23 +33,12 @@ export class AuthService {
 			};
         }
 
-        if (await this.usersService.exists({key: "username", value: user.username})) {
-            return {
-                status_code: 400,
-                error: 'This username is already taken.'
-            };
-        }
+        const userCreated = await this.usersService.create(user)
 
-        if (await this.usersService.exists({key: "email", value: user.email})) {
-            return {
-                status_code: 400,
-                error: 'This email is already registered.'
-            };
+        if (userCreated) {
+            return {status: 400, message: userCreated}
+        } else {
+            return {status: 201}
         }
-
-		this.usersService.create(user);
-		return {
-			status_code: 201
-		};
 	}
 }
