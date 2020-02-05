@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from 'typeorm';
 import { Seance } from '../seances/seances.entity';
 
 @Entity({ name: 'user' })
@@ -8,9 +8,11 @@ export class User {
     id: number;
 
     @Column({ type: 'varchar', length: 255 })
+    @Index({ unique: true })
     email: string;
 
     @Column({ type: 'varchar', length: 255 })
+    @Index({ unique: true })
     username: string;
 
     @Column({ type: 'date', nullable: true })
@@ -18,9 +20,6 @@ export class User {
 
     @Column({ type: 'varchar', length: 255 })
     password: string;
-
-    @Column({ type: 'varchar', length: 255 })
-    salt: string;
 
     @Column({ type: 'varchar', length: 255 })
     role: string;
