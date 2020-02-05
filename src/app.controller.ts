@@ -43,15 +43,15 @@ export class AppController {
 		return this.usersService.findGms();
     }
 
+    // get users reservation
+    // take a reservation
+
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
 	getOneGms(@Request() req, @Param() params) {
         // get gms disponibilities
-        console.log(new Date());
 		return this.seancesService.findGmSeances(params.id);
 	}
-	// get users reservation
-	// take a reservation
 
     // Routes for seller :
     @UseGuards(AuthGuard('jwt'))

@@ -27,9 +27,11 @@ export class SeancesService {
 
         await this.seanceRepository.save(seance)
         .then(()=> {
+            console.log('req good')
             return {status: 201};
         })
         .catch(err => {
+            console.log('req bad')
             return {status: 400, message: err};
         })
 	}

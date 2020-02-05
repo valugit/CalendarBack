@@ -17,11 +17,9 @@ export class SeanceDto {
     mature: Boolean;
 
     @IsDateString()
-    @MinDate(new Date())
     date_start: Date;
 
     @IsDateString()
-    @MinDate(new Date())
     // May need to check if date_end > date_start
     date_end: Date;
 }
