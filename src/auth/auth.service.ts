@@ -31,26 +31,22 @@ export class AuthService {
 				status_code: 400,
 				error: 'Some information is missing from the request.'
 			};
-		}
-		// TODO: check email and maj/min/symbol
-		if (typeof user.username !== 'string' || (user.username.length < 2 || user.username.length > 255)) {
-			return {
-				status_code: 400,
-				error: 'The username must be between 2 and 255 characters.'
-			};
-		}
-		if (typeof user.password !== 'string' || (user.password.length < 8 || user.password.length > 255)) {
-			return {
-				status_code: 400,
-				error: 'The password must be between 8 and 255 characters.'
-			};
-		}
-		if (user.role !== 'player' && user.role !== 'gamemaster') {
-			return {
-				status_code: 400,
-				error: 'The role can be either \'player\' or \'gamemaster\', nothing else.'
-			};
-		}
+        }
+
+        if (await this.usersService.exists({key: "username", value: user.username})) {
+            return {
+                status_code: 400,
+                error: 'This username is already taken.'
+            };
+        }
+
+        if (await this.usersService.exists({key: "email", value: user.email})) {
+            return {
+                status_code: 400,
+                error: 'This email is already registered.'
+            };
+        }
+
 		this.usersService.create(user);
 		return {
 			status_code: 201

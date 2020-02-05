@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
+import { validate } from 'class-validator';
 import * as crypto from 'crypto';
 
 export type Users = any
@@ -20,9 +21,9 @@ export class UsersService {
 		user.password = crypto.createHmac('sha256', info.password).digest('hex');
 		user.salt = 'salty';
 		user.role = info.role;
-		user.birthdate = info.birthdate;
+        user.birthdate = info.birthdate;
 
-		await this.userRepository.save(user);
+        await this.userRepository.save(user);
 	}
 
 	findOne(username: string): Promise<User[]> {
@@ -31,7 +32,19 @@ export class UsersService {
 
     checkLogin(username: string): Promise<User[]> {
 		return this.userRepository.find({where: { username: username } });
-	}
+    }
+
+    async exists(param: {key: string, value: string}): Promise<Boolean> {
+        const item = await this.userRepository
+            .createQueryBuilder("user")
+            .where(`"${param.key}" = "${param.value}"`)
+            .getCount();
+
+        console.log(`"${param.key}" = "${param.value}"`)
+        console.log(item)
+
+        return true
+    }
 
 	findAll(): Promise<User[]> {
 		return this.userRepository.find();
