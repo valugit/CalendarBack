@@ -48,6 +48,7 @@ Header {Authorization : Bearer <Token>}
 ```
 ```json
 {
+    "title": "I'm a very good title",
 	"gamemaster": 6,
 	"game": 1,
 	"date_start": "2020-12-20T13:00",

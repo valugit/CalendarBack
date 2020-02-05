@@ -50,7 +50,6 @@ export class AppController {
     @Get('gamemaster/:id')
 	getOneGms(@Request() req, @Param() params) {
         // get gms disponibilities
-        console.log(new Date());
 		return this.seancesService.findGmSeances(params.id);
 	}
 
