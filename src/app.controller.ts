@@ -4,7 +4,6 @@ import { AuthService } from './auth/auth.service';
 import { Roles } from './roles/roles.decorator';
 import { UsersService } from './users/users.service';
 import { SeancesService } from './seances/seances.service';
-// import { Roles } from './roles/roles.decorator';
 
 @Controller()
 export class AppController {
@@ -43,7 +42,6 @@ export class AppController {
     }
 
     @UseGuards(AuthGuard('jwt'))
-    @Roles('player')
     @Get('gamemaster/:id')
 	getOneGms(@Request() req, @Param() params) {
         // get gms disponibilities
@@ -53,7 +51,10 @@ export class AppController {
 	// take a reservation
 
 	// Routes for seller :
-	// get all dispo
 	// add disponibility
+	@Post('seance/add')
+	async addSeance(@Request() req) {
+		return this.seancesService.create(req.body);
+	}
 	// remove disponibility
 }

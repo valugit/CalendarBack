@@ -10,6 +10,18 @@ export class SeancesService {
     private readonly seanceRepository: Repository<Seance>,
 	) {}
 
+    async create(info: any) {
+		const seance = new Seance();
+
+		seance.gamemaster = info.gamemaster;
+		// seance.email = info.email;
+		// seance.salt = 'salty';
+		// seance.role = info.role;
+		// seance.birthdate = info.birthdate;
+
+		// await this.seanceRepository.save(seance);
+	}
+
 	findAll(): Promise<Seance[]> {
 		return this.seanceRepository.find();
     }
