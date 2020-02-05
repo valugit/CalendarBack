@@ -40,11 +40,25 @@ export class AppController {
     @Get('gamemaster/all')
 	getGms(@Request() req) {
 		// get all gms
-		return this.usersService.findGms();
+        return this.usersService.findGms();
+        // add next seances planned in 7 following days
     }
 
-    // get users reservation
-    // take a reservation
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('player')
+    @Get('user/reservation')
+	getReservations(@Request() req) {
+		// get users reservation
+		// return this.usersService.findRes();
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('player')
+    @Post('seance/join')
+	joinSeance(@Request() req) {
+		// take a reservation
+		// return
+    }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
@@ -60,6 +74,13 @@ export class AppController {
 	async addSeance(@Body() body: SeanceDto) {
         // add disponibility
 		return this.seancesService.create(body);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('gamemaster')
+	@Post('seance/remove')
+	async removeSeance(@Body() body) {
+        // remove gamemasters's own disponibility
+		// return this.seancesService.delete(body);
 	}
-	// remove disponibility
 }
