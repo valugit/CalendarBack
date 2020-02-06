@@ -10,8 +10,8 @@ export class AuthService {
     async validateUser(username: string, pass: string): Promise<any> {
         const user = await this.usersService.checkLogin(username);
 
-        if (user && crypto.createHmac('sha256', pass).digest('hex') === user[0].password) {
-            const { password, ...result } = user[0];
+        if (user && crypto.createHmac('sha256', pass).digest('hex') === user.password) {
+            const { password, ...result } = user;
             return result;
         }
 

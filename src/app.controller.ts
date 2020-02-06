@@ -43,7 +43,7 @@ export class AppController {
     getGms(@Request() req) {
         // get all gms
         return this.usersService.findGms();
-        // TODO: add next seances planned in 7 following days
+        // TODO: add number of player registered for each seance
     }
 
     @UseGuards(AuthGuard('jwt'))

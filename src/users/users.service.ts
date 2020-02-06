@@ -36,8 +36,12 @@ export class UsersService {
         return this.userRepository.find({select: ['id', 'username', 'email', 'role', 'birthdate'], where: { username: username } });
     }
 
-    checkLogin(username: string): Promise<User[]> {
-        return this.userRepository.find({where: { username: username } });
+    checkLogin(username: string): Promise<User> {
+        return this.userRepository
+        .createQueryBuilder('user')
+        .where('username = :name', {name: username})
+        .addSelect('user.password')
+        .getOne();
     }
 
     findAll(): Promise<User[]> {
