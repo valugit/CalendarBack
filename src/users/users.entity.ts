@@ -24,6 +24,6 @@ export class User {
     @Column({ type: 'varchar', length: 255 })
     role: string;
 
-    @OneToMany(type=>Seance, seance => seance.id)
+    @OneToMany(type=>Seance, seance => seance.gamemaster)
     gm_seances: Seance[];
 }

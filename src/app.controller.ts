@@ -85,7 +85,7 @@ export class AppController {
         // add disponibility
         const seanceCreated = await this.seancesService.create(body);
 
-        if (!seanceCreated) {
+        if (seanceCreated) {
             return {status: 400, message: seanceCreated};
         } else {
             return {status: 201};
