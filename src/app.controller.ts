@@ -7,6 +7,7 @@ import { UserDto } from './users/users-create.dto';
 import { SeancesService } from './seances/seances.service';
 import { SeanceDto } from './seances/seances-create.dto';
 import { GamesService } from './games/games.service';
+import { GameDto } from './games/games-create.dto';
 
 @Controller()
 export class AppController {
@@ -34,13 +35,11 @@ export class AppController {
         return this.usersService.findOne(req.user.username);
     }
 
-    // @Roles('admin')
-
     // Routes for normal user :
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
     @Get('gamemaster/all')
-    getGms(@Request() req) {
+    getGms() {
         // get all gms
         return this.usersService.findGms();
         // TODO: add number of player registered for each seance
@@ -81,9 +80,9 @@ export class AppController {
     @UseGuards(AuthGuard('jwt'))
     @Roles('gamemaster')
     @Post('seance/add')
-    async addSeance(@Body() body: SeanceDto) {
+    async addSeance(@Body() body: SeanceDto, @Request() req) {
         // add disponibility
-        const seanceCreated = await this.seancesService.create(body);
+        const seanceCreated = await this.seancesService.create(body, req.user);
 
         if (seanceCreated) {
             return {status: 400, message: seanceCreated};
@@ -98,5 +97,20 @@ export class AppController {
     async removeSeance(@Body() body) {
         // remove gamemasters's own disponibility
         // TODO: return this.seancesService.delete(body);
+    }
+
+    // Routes for admin only
+    @UseGuards(AuthGuard('jwt'))
+    @Roles('admin')
+    @Post('game/add')
+    async addGame(@Body() body: GameDto) {
+        // add game
+        const gameCreated = await this.gamesService.create(body);
+
+        if (gameCreated) {
+            return {status: 400, message: gameCreated};
+        } else {
+            return {status: 201};
+        }
     }
 }

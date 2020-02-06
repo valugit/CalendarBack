@@ -6,15 +6,15 @@ import { Seance } from './seances.entity';
 @Injectable()
 export class SeancesService {
     constructor(
-    @InjectRepository(Seance)
-    private readonly seanceRepository: Repository<Seance>,
+        @InjectRepository(Seance)
+        private readonly seanceRepository: Repository<Seance>
     ) {}
 
-    async create(info: any) {
+    async create(info: any, user: any) {
         const seance = new Seance();
 
         seance.title = info.title;
-        seance.gamemaster = info.gamemaster;
+        seance.gamemaster = user.id;
         seance.seance_game = info.seance_game;
         seance.mature = true;
 
