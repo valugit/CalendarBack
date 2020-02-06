@@ -18,30 +18,30 @@ export class AppController {
     ) {}
 
     @Post('auth/register')
-	async register(@Body() body: UserDto) {
-		return this.authService.register(body);
-	}
+    async register(@Body() body: UserDto) {
+        return this.authService.register(body);
+    }
 
-	@UseGuards(AuthGuard('local'))
-	@Post('auth/login')
-	async login(@Request() req) {
-		return this.authService.login(req.user);
-	}
+    @UseGuards(AuthGuard('local'))
+    @Post('auth/login')
+    async login(@Request() req) {
+        return this.authService.login(req.user);
+    }
 
-	@UseGuards(AuthGuard('jwt'))
-	@Get('user/profile')
-	getProfile(@Request() req) {
-		return this.usersService.findOne(req.user.username);
-	}
+    @UseGuards(AuthGuard('jwt'))
+    @Get('user/profile')
+    getProfile(@Request() req) {
+        return this.usersService.findOne(req.user.username);
+    }
 
-	// @Roles('admin')
+    // @Roles('admin')
 
     // Routes for normal user :
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
     @Get('gamemaster/all')
-	getGms(@Request() req) {
-		// get all gms
+    getGms(@Request() req) {
+        // get all gms
         return this.usersService.findGms();
         // TODO: add next seances planned in 7 following days
     }
@@ -49,47 +49,54 @@ export class AppController {
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
     @Get('user/reservation')
-	getReservations(@Request() req) {
-		// get users reservation
-		// TODO: return this.usersService.findRes();
+    getReservations(@Request() req) {
+        // get users reservation
+        // TODO: return this.usersService.findRes();
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
     @Post('seance/join')
-	joinSeance(@Request() req) {
-		// take a reservation
-		// TODO: return
+    joinSeance(@Request() req) {
+        // take a reservation
+        // TODO: return
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
-	getOneGms(@Param() params) {
+    getOneGms(@Param() params) {
         // get gms disponibilities
-		return this.seancesService.findGmSeances(params.id);
+        return this.seancesService.findGmSeances(params.id);
+        // TODO: add number of player registered for each seance
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('game/all')
-	getGames(@Request() req, @Param() params) {
+    getGames(@Request() req, @Param() params) {
         // get all games
-		return this.gamesService.findAll();
+        return this.gamesService.findAll();
     }
 
     // Routes for seller :
     @UseGuards(AuthGuard('jwt'))
     @Roles('gamemaster')
-	@Post('seance/add')
-	async addSeance(@Body() body: SeanceDto) {
+    @Post('seance/add')
+    async addSeance(@Body() body: SeanceDto) {
         // add disponibility
-		return this.seancesService.create(body);
+        const seanceCreated = await this.seancesService.create(body);
+
+        if (!seanceCreated) {
+            return {status: 400, message: seanceCreated};
+        } else {
+            return {status: 201};
+        }
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Roles('gamemaster')
-	@Post('seance/remove')
-	async removeSeance(@Body() body) {
+    @Post('seance/remove')
+    async removeSeance(@Body() body) {
         // remove gamemasters's own disponibility
-		// TODO: return this.seancesService.delete(body);
-	}
+        // TODO: return this.seancesService.delete(body);
+    }
 }

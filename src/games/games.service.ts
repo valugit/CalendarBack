@@ -5,12 +5,12 @@ import { Game } from './games.entity';
 
 @Injectable()
 export class GamesService {
-	constructor(
+    constructor(
     @InjectRepository(Game)
     private readonly gameRepository: Repository<Game>,
-	) {}
+    ) {}
 
-	findAll(): Promise<Game[]> {
-		return this.gameRepository.find();
-	}
+    findAll(): Promise<Game[]> {
+        return this.gameRepository.find();
+    }
 }
