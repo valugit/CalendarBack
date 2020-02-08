@@ -5,15 +5,15 @@ import { Seance } from './seances.entity';
 
 @Injectable()
 export class SeancesService {
-	constructor(
+    constructor(
     @InjectRepository(Seance)
     private readonly seanceRepository: Repository<Seance>,
-	) {}
+    ) {}
 
     async create(info: any) {
-		const seance = new Seance();
+        const seance = new Seance();
 
-		seance.title = info.title;
+        seance.title = info.title;
         seance.gamemaster = info.gamemaster;
         seance.seance_game = info.seance_game;
         seance.mature = true;
@@ -22,25 +22,23 @@ export class SeancesService {
             seance.mature = false;
         }
 
-        seance.date_start = info.date_start;
-        seance.date_end = info.date_end;
+        seance.start = info.start;
+        seance.end = info.end;
+
+        var check;
 
         await this.seanceRepository.save(seance)
-        .then(()=> {
-            console.log('req good')
-            return {status: 201};
-        })
-        .catch(err => {
-            console.log('req bad')
-            return {status: 400, message: err};
-        })
-	}
+            .catch(err => {
+                check = err;
+            });
+        return check;
+    }
 
-	findAll(): Promise<Seance[]> {
-		return this.seanceRepository.find();
+    findAll(): Promise<Seance[]> {
+        return this.seanceRepository.find();
     }
 
     findGmSeances(id: string): Promise<Seance[]> {
-        return this.seanceRepository.find({relations: ['seance_game'], where: {gamemaster: id}})
+        return this.seanceRepository.find({relations: ['seance_game'], where: {gamemaster: id}});
     }
 }

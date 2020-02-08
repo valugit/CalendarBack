@@ -18,12 +18,12 @@ export class User {
     @Column({ type: 'date', nullable: true })
     birthdate: Date | null;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 255, select: false })
     password: string;
 
     @Column({ type: 'varchar', length: 255 })
     role: string;
 
-    @OneToMany(type=>Seance, seance => seance.id)
+    @OneToMany(type=>Seance, seance => seance.gamemaster)
     gm_seances: Seance[];
 }

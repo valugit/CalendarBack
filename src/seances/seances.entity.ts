@@ -11,6 +11,9 @@ export class Seance {
     @Column({ type: 'varchar', length: 1024 })
     title: string;
 
+    @Column({ type: 'text', nullable: true })
+    description: string;
+
     @ManyToOne(type => User, user => user.id)
     gamemaster: User;
 
@@ -25,8 +28,8 @@ export class Seance {
     mature: boolean;
 
     @Column({ type: 'timestamptz' })
-    date_start: Date;
+    start: Date;
 
     @Column({ type: 'timestamptz' })
-    date_end: Date;
+    end: Date;
 }

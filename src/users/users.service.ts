@@ -3,58 +3,59 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import * as crypto from 'crypto';
+import { Seance } from 'src/seances/seances.entity';
+import { Game } from 'src/games/games.entity';
 
 export type Users = any
 
 @Injectable()
 export class UsersService {
-	private readonly users: User[]
+    private readonly users: User[]
 
-	constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-	async create(info: any): Promise<any>{
-		const user = new User();
+    async create(info: any): Promise<any>{
+        const user = new User();
 
-		user.username = info.username;
-		user.email = info.email;
-		user.password = crypto.createHmac('sha256', info.password).digest('hex');
-		user.role = info.role;
+        user.username = info.username;
+        user.email = info.email;
+        user.password = crypto.createHmac('sha256', info.password).digest('hex');
+        user.role = info.role;
         user.birthdate = info.birthdate;
 
         var check;
 
         await this.userRepository.save(user)
-        .catch(err => {
-            check = err;
-        })
+            .catch(err => {
+                check = err;
+            });
         return check;
-	}
-
-	findOne(username: string): Promise<User[]> {
-		return this.userRepository.find({select: ['id', 'username', 'email', 'role', 'birthdate'], where: { username: username } });
     }
 
-    checkLogin(username: string): Promise<User[]> {
-		return this.userRepository.find({where: { username: username } });
+    findOne(username: string): Promise<User[]> {
+        return this.userRepository.find({select: ['id', 'username', 'email', 'role', 'birthdate'], where: { username: username } });
     }
 
-    async exists(param: {key: string, value: string}): Promise<Boolean> {
-        const item = await this.userRepository
-            .createQueryBuilder("user")
-            .andWhere(`"${param.key}" = "${param.key}"`)
-            .getCount();
-
-        console.log(`"${param.key}" = "${param.value}"`)
-        console.log(item)
-
-        return true
+    checkLogin(username: string): Promise<User> {
+        return this.userRepository
+        .createQueryBuilder('user')
+        .where('username = :name', {name: username})
+        .addSelect('user.password')
+        .getOne();
     }
 
-	findAll(): Promise<User[]> {
-		return this.userRepository.find();
-	}
+    findAll(): Promise<User[]> {
+        return this.userRepository.find();
+    }
 
-	findGms(): Promise<User[]> {
-		return this.userRepository.find({select: ['id', 'username'], where: {role: 'gamemaster'}});
+    async findGms(): Promise<User[]> {
+        const qb = await this.userRepository.createQueryBuilder('user')
+        .select(['user.id', 'user.username', 'seance.id', 'seance.title', 'seance.start', 'seance.end', 'game.name'])
+        .leftJoinAndSelect('user.gm_seances', 'seance')
+        .leftJoinAndSelect('seance.seance_game', 'game')
+        .where('seance.start between now() and now() + interval \'1 week\'')
+        .getMany();
+
+        return qb;
     }
 }
