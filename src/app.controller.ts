@@ -16,7 +16,7 @@ export class AppController {
         private readonly usersService: UsersService,
         private readonly seancesService: SeancesService,
         private readonly gamesService: GamesService
-    ) {}
+    ) { }
 
     @Post('auth/register')
     async register(@Body() body: UserDto) {
@@ -37,7 +37,6 @@ export class AppController {
 
     // Routes for normal user :
     @UseGuards(AuthGuard('jwt'))
-    @Roles('player')
     @Get('gamemaster/all')
     getGms() {
         // get all gms
@@ -52,6 +51,7 @@ export class AppController {
     getReservations(@Request() req) {
         // get users reservation
         return this.usersService.findReservations(req.user);
+        // TODO: Does this work ?
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -60,14 +60,17 @@ export class AppController {
     joinSeance(@Request() req) {
         // take a reservation
         return this.seancesService.joinSeance(req.user, req.body);
+        // TODO: This does NOT work
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
     getOneGms(@Param() params) {
         // get gms disponibilities
-        return this.seancesService.findGmSeances(params.id);
+        return this.usersService.findGmSeances(params.id);
         // TODO: add number of player registered for each seance
+        // TODO: return gm info
+        // TODO: return only future seances
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -86,9 +89,9 @@ export class AppController {
         const seanceCreated = await this.seancesService.create(body, req.user);
 
         if (seanceCreated) {
-            return {status: 400, message: seanceCreated};
+            return { status: 400, message: seanceCreated };
         } else {
-            return {status: 201};
+            return { status: 201 };
         }
     }
 
@@ -109,9 +112,9 @@ export class AppController {
         const gameCreated = await this.gamesService.create(body);
 
         if (gameCreated) {
-            return {status: 400, message: gameCreated};
+            return { status: 400, message: gameCreated };
         } else {
-            return {status: 201};
+            return { status: 201 };
         }
     }
 }
