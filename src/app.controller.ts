@@ -8,6 +8,7 @@ import { SeancesService } from './seances/seances.service';
 import { SeanceDto } from './seances/seances-create.dto';
 import { GamesService } from './games/games.service';
 import { GameDto } from './games/games-create.dto';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
@@ -15,7 +16,8 @@ export class AppController {
         private readonly authService: AuthService,
         private readonly usersService: UsersService,
         private readonly seancesService: SeancesService,
-        private readonly gamesService: GamesService
+        private readonly gamesService: GamesService,
+        private readonly appService: AppService
     ) { }
 
     @Post('auth/register')
@@ -69,7 +71,6 @@ export class AppController {
         // get gms disponibilities
         return this.usersService.findGmSeances(params.id);
         // TODO: add number of player registered for each seance
-        // TODO: return gm info
         // TODO: return only future seances
     }
 
@@ -86,6 +87,10 @@ export class AppController {
     @Post('seance/add')
     async addSeance(@Body() body: SeanceDto, @Request() req) {
         // add disponibility
+        // this.appService.compareDates(body.start, body.end)
+        if (body.start > body.end) {
+            return { status: 400, message: 'Start date must be before end date.' };
+        }
         const seanceCreated = await this.seancesService.create(body, req.user);
 
         if (seanceCreated) {
@@ -93,6 +98,7 @@ export class AppController {
         } else {
             return { status: 201 };
         }
+        // TODO: Check if start < end 'cause it could break the front
     }
 
     @UseGuards(AuthGuard('jwt'))

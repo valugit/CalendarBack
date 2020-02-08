@@ -19,42 +19,15 @@ export class AppService {
         return 'Hello World!';
     }
 
-    filldb() {
-        const check = this.usersService.findOne('user');
+    compareDates(iso1: string, iso2: string): Boolean {
 
-        if (!check) {
-            const user = {
-                username: 'user',
-                email: 'user@user.com',
-                password: crypto.createHmac('sha256', 'Userpa55').digest('hex'),
-                role: 'player'
-            };
-            this.usersService.create(user);
+        const d1 = new Date(iso1);
+        const d2 = new Date(iso2);
 
-            const dnd = {
-                name: 'Dungeon & Dragons',
-                info: 'Popular medieval fantasy rpg',
-                color: '#ff8c00'
-            };
-            this.gamesService.create(dnd);
-            const path = {
-                name: 'Pathfinder',
-                info: 'AKA Dungeons & Dragons 3.0',
-                color: '#ff5555'
-            };
-            this.gamesService.create(path);
-            const cthu = {
-                name: 'Cthulhu',
-                info: 'Horror rpg',
-                color: '#005438'
-            };
-            this.gamesService.create(cthu);
-            const home = {
-                name: 'Homebrew',
-                info: 'Self created system and campaign',
-                color: '#9ec0ff'
-            };
-            this.gamesService.create(home);
+        if (d1 < d2) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
