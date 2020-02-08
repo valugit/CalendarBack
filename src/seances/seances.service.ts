@@ -12,6 +12,9 @@ export class SeancesService {
         const seance = new Seance();
 
         seance.title = info.title;
+        if (info.description != "") {
+            seance.description = info.description;
+        }
         seance.gamemaster = user.id;
         seance.seance_game = info.seance_game;
         seance.mature = true;

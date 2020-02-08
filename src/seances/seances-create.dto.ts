@@ -6,6 +6,9 @@ export class SeanceDto {
     @Length(10, 1024)
     title: string;
 
+    @IsString()
+    description: string;
+
     @IsInt()
     seance_game: number;
 
