@@ -53,6 +53,7 @@ export class UsersService {
         const qb = await this.userRepository.createQueryBuilder('user')
             .leftJoinAndSelect('user.gm_seances', 'seance')
             .leftJoinAndSelect('seance.seance_game', 'seance_game')
+            .leftJoinAndSelect('seance.players', 'players')
             .where('user.id = :number', { number: id })
             .andWhere('seance.start > now()')
             .getOne();

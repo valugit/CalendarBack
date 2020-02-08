@@ -3,9 +3,10 @@ import { IsString, Length, IsInt, IsOptional, IsBoolean, IsDateString } from 'cl
 export class SeanceDto {
 
     @IsString()
-    @Length(10, 1024)
+    @Length(1, 1024)
     title: string;
 
+    @IsOptional()
     @IsString()
     description: string;
 
