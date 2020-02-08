@@ -8,6 +8,7 @@ import { SeancesService } from './seances/seances.service';
 import { SeanceDto } from './seances/seances-create.dto';
 import { GamesService } from './games/games.service';
 import { GameDto } from './games/games-create.dto';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
@@ -15,8 +16,9 @@ export class AppController {
         private readonly authService: AuthService,
         private readonly usersService: UsersService,
         private readonly seancesService: SeancesService,
-        private readonly gamesService: GamesService
-    ) {}
+        private readonly gamesService: GamesService,
+        private readonly appService: AppService
+    ) { }
 
     @Post('auth/register')
     async register(@Body() body: UserDto) {
@@ -37,7 +39,6 @@ export class AppController {
 
     // Routes for normal user :
     @UseGuards(AuthGuard('jwt'))
-    @Roles('player')
     @Get('gamemaster/all')
     getGms() {
         // get all gms
@@ -52,6 +53,7 @@ export class AppController {
     getReservations(@Request() req) {
         // get users reservation
         return this.usersService.findReservations(req.user);
+        // TODO: Does this work ?
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -60,14 +62,16 @@ export class AppController {
     joinSeance(@Request() req) {
         // take a reservation
         return this.seancesService.joinSeance(req.user, req.body);
+        // TODO: This does NOT work
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
     getOneGms(@Param() params) {
         // get gms disponibilities
-        return this.seancesService.findGmSeances(params.id);
+        return this.usersService.findGmSeances(params.id);
         // TODO: add number of player registered for each seance
+        // TODO: return only future seances
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -83,13 +87,18 @@ export class AppController {
     @Post('seance/add')
     async addSeance(@Body() body: SeanceDto, @Request() req) {
         // add disponibility
+        // this.appService.compareDates(body.start, body.end)
+        if (body.start > body.end) {
+            return { status: 400, message: 'Start date must be before end date.' };
+        }
         const seanceCreated = await this.seancesService.create(body, req.user);
 
         if (seanceCreated) {
-            return {status: 400, message: seanceCreated};
+            return { status: 400, message: seanceCreated };
         } else {
-            return {status: 201};
+            return { status: 201 };
         }
+        // TODO: Check if start < end 'cause it could break the front
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -109,9 +118,9 @@ export class AppController {
         const gameCreated = await this.gamesService.create(body);
 
         if (gameCreated) {
-            return {status: 400, message: gameCreated};
+            return { status: 400, message: gameCreated };
         } else {
-            return {status: 201};
+            return { status: 201 };
         }
     }
 }

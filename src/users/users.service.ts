@@ -36,8 +36,8 @@ export class UsersService {
         });
     }
 
-    checkLogin(username: string): Promise<User> {
-        return this.userRepository
+    async checkLogin(username: string): Promise<User> {
+        return await this.userRepository
             .createQueryBuilder('user')
             .where('username = :name', { name: username })
             .addSelect('user.password')
@@ -46,6 +46,18 @@ export class UsersService {
 
     findAll(): Promise<User[]> {
         return this.userRepository.find();
+    }
+
+
+    async findGmSeances(id: string): Promise<User> {
+        const qb = await this.userRepository.createQueryBuilder('user')
+            .leftJoinAndSelect('user.gm_seances', 'seance')
+            .leftJoinAndSelect('seance.seance_game', 'seance_game')
+            .where('user.id = :number', { number: id })
+            .andWhere('seance.start > now()')
+            .getOne();
+
+        return qb;
     }
 
     async findGms(): Promise<User[]> {
@@ -63,7 +75,7 @@ export class UsersService {
             .leftJoinAndSelect('user.gm_seances', 'seance')
             .leftJoinAndSelect('seance.seance_game', 'game')
             .leftJoinAndSelect('seance.players', 'players')
-            .where("seance.start between now() and now() + interval '1 week'")
+            .where("seance.start > now()")
             .getMany();
 
         return qb;

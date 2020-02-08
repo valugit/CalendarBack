@@ -6,12 +6,15 @@ import { User } from 'src/users/users.entity';
 
 @Injectable()
 export class SeancesService {
-    constructor(@InjectRepository(Seance) private readonly seanceRepository: Repository<Seance>) {}
+    constructor(@InjectRepository(Seance) private readonly seanceRepository: Repository<Seance>) { }
 
     async create(info: any, user: any) {
         const seance = new Seance();
 
         seance.title = info.title;
+        if (info.description != "") {
+            seance.description = info.description;
+        }
         seance.gamemaster = user.id;
         seance.seance_game = info.seance_game;
         seance.mature = true;
@@ -33,10 +36,6 @@ export class SeancesService {
 
     findAll(): Promise<Seance[]> {
         return this.seanceRepository.find();
-    }
-
-    findGmSeances(id: string): Promise<Seance[]> {
-        return this.seanceRepository.find({ relations: [ 'seance_game' ], where: { gamemaster: id } });
     }
 
     async joinSeance(user, info) {
