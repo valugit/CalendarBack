@@ -43,8 +43,6 @@ export class AppController {
     getGms() {
         // get all gms
         return this.usersService.findGms();
-        // TODO: add number of player registered for each seance instead of array of players
-        // maybe later 'cause I couldn't find how to do this w/ the request :/
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -70,8 +68,6 @@ export class AppController {
     getOneGms(@Param() params) {
         // get gms disponibilities
         return this.usersService.findGmSeances(params.id);
-        // TODO: add number of player registered for each seance
-        // TODO: return only future seances
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -98,7 +94,6 @@ export class AppController {
         } else {
             return { status: 201 };
         }
-        // TODO: Check if start < end 'cause it could break the front
     }
 
     @UseGuards(AuthGuard('jwt'))
