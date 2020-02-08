@@ -10,37 +10,37 @@ export type Users = any;
 export class UsersService {
     private readonly users: User[];
 
-    constructor( @InjectRepository( User ) private readonly userRepository: Repository<User> ) { }
+    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
 
-    async create( info: any ): Promise<any> {
+    async create(info: any): Promise<any> {
         const user = new User();
 
         user.username = info.username;
         user.email = info.email;
-        user.password = crypto.createHmac( 'sha256', info.password ).digest( 'hex' );
+        user.password = crypto.createHmac('sha256', info.password).digest('hex');
         user.role = info.role;
         user.birthdate = info.birthdate;
 
         var check;
 
-        await this.userRepository.save( user ).catch( ( err ) => {
+        await this.userRepository.save(user).catch((err) => {
             check = err;
-        } );
+        });
         return check;
     }
 
-    findOne( username: string ): Promise<User[]> {
-        return this.userRepository.find( {
-            select: [ 'id', 'username', 'email', 'role', 'birthdate' ],
+    findOne(username: string): Promise<User[]> {
+        return this.userRepository.find({
+            select: ['id', 'username', 'email', 'role', 'birthdate'],
             where: { username: username }
-        } );
+        });
     }
 
-    checkLogin( username: string ): Promise<User> {
+    checkLogin(username: string): Promise<User> {
         return this.userRepository
-            .createQueryBuilder( 'user' )
-            .where( 'username = :name', { name: username } )
-            .addSelect( 'user.password' )
+            .createQueryBuilder('user')
+            .where('username = :name', { name: username })
+            .addSelect('user.password')
             .getOne();
     }
 
@@ -50,8 +50,8 @@ export class UsersService {
 
     async findGms(): Promise<User[]> {
         const qb = await this.userRepository
-            .createQueryBuilder( 'user' )
-            .select( [
+            .createQueryBuilder('user')
+            .select([
                 'user.id',
                 'user.username',
                 'seance.id',
@@ -59,24 +59,20 @@ export class UsersService {
                 'seance.start',
                 'seance.end',
                 'game.name'
-            ] )
-            .leftJoinAndSelect( 'user.gm_seances', 'seance' )
-            .leftJoinAndSelect( 'seance.seance_game', 'game' )
-            .leftJoinAndSelect( 'seance.players', 'players' )
-            .addSelect( subq => {
-                return subq
-                    .leftJoinAndSelect( 'user.gm_seances', 'seance' )
-                    .where( "seance.start between now() and now() + interval '1 week'" );
-            } )
+            ])
+            .leftJoinAndSelect('user.gm_seances', 'seance')
+            .leftJoinAndSelect('seance.seance_game', 'game')
+            .leftJoinAndSelect('seance.players', 'players')
+            .where("seance.start between now() and now() + interval '1 week'")
             .getMany();
 
         return qb;
     }
 
-    async findReservations( user: any ) {
+    async findReservations(user: any) {
         return await this.userRepository
-            .createQueryBuilder( 'user' )
-            .innerJoinAndSelect( 'user.player_seances', 'seance' )
+            .createQueryBuilder('user')
+            .innerJoinAndSelect('user.player_seances', 'seance')
             .getMany();
     }
 }

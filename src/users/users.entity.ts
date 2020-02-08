@@ -24,10 +24,6 @@ export class User {
     @Column({ type: 'varchar', length: 255 })
     role: string;
 
-    @OneToMany(type=>Seance, seance => seance.gamemaster)
+    @OneToMany(type => Seance, seance => seance.gamemaster)
     gm_seances: Seance[];
-
-    @ManyToMany(type=>Seance, seance => seance.players)
-    @JoinTable()
-    player_seances: Seance[];
 }
