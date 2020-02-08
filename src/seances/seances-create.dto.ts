@@ -1,13 +1,10 @@
-import { IsString, Length, MinDate, IsInt, IsOptional, IsBoolean, IsDateString } from 'class-validator';
+import { IsString, Length, IsInt, IsOptional, IsBoolean, IsDateString } from 'class-validator';
 
 export class SeanceDto {
 
     @IsString()
     @Length(10, 1024)
     title: string;
-
-    @IsInt()
-    gamemaster: number;
 
     @IsInt()
     seance_game: number;
@@ -20,6 +17,5 @@ export class SeanceDto {
     start: Date;
 
     @IsDateString()
-    // May need to check if end > start
     end: Date;
 }

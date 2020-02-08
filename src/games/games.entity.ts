@@ -13,6 +13,9 @@ export class Game {
     @Column({ type: 'text' })
     info: string;
 
+    @Column({ type: 'varchar', length: 7 })
+    color: string;
+
     @OneToMany(type=>Seance, seance => seance.id)
     game_seances: Seance[];
 }
