@@ -42,15 +42,16 @@ export class AppController {
     getGms() {
         // get all gms
         return this.usersService.findGms();
-        // TODO: add number of player registered for each seance
+        // TODO: add number of player registered for each seance instead of array of players
+        // maybe later 'cause I couldn't find how to do this w/ the request :/
     }
 
     @UseGuards(AuthGuard('jwt'))
     @Roles('player')
-    @Get('user/reservation')
+    @Get('user/reservations')
     getReservations(@Request() req) {
         // get users reservation
-        // TODO: return this.usersService.findRes();
+        return this.usersService.findReservations(req.user);
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -58,7 +59,7 @@ export class AppController {
     @Post('seance/join')
     joinSeance(@Request() req) {
         // take a reservation
-        // TODO: return
+        return this.seancesService.joinSeance(req.user, req.body);
     }
 
     @UseGuards(AuthGuard('jwt'))

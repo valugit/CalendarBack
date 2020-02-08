@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, Index, JoinTable } from 'typeorm';
 import { Seance } from '../seances/seances.entity';
 
 @Entity({ name: 'user' })
@@ -26,4 +26,8 @@ export class User {
 
     @OneToMany(type=>Seance, seance => seance.gamemaster)
     gm_seances: Seance[];
+
+    @ManyToMany(type=>Seance, seance => seance.players)
+    @JoinTable()
+    player_seances: Seance[];
 }

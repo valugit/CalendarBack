@@ -32,7 +32,7 @@ Sends back a JWT Token
 Header {Authorization : Bearer <Token>}
 ```
 
-### GET /user/reservation (unavailable)
+### GET /user/reservation
 ```
 Header {Authorization : Bearer <Token>}
 ```
