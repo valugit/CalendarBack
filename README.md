@@ -71,7 +71,7 @@ Header {Authorization : Bearer <Token>}
 ```
 ```json
 {
-    "id_seance": 1,
+    "seance_id": 1,
 }
 ```
 
