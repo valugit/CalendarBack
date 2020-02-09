@@ -89,10 +89,11 @@ export class UsersService {
         return qb;
     }
 
-    async findReservations(user: any) {
+    async findReservations(user: any): Promise<User> {
         return await this.userRepository
             .createQueryBuilder('user')
-            .innerJoinAndSelect('user.player_seances', 'seance')
-            .getMany();
+            .innerJoinAndSelect('user.seance_joined', 'seance')
+            .where('user.id = :id', { id: user.id })
+            .getOne();
     }
 }

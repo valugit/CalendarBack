@@ -39,41 +39,40 @@ export class SeancesService {
     }
 
     async joinSeance(user, info) {
-        const check = await this.seanceRepository
-            .createQueryBuilder()
-            .relation(User, 'player_seances')
-            .of(user.id)
-            .loadOne();
+        const seanceExists = await this.seanceRepository.createQueryBuilder('seance')
+            .where('seance.id = :seance_id', { seance_id: info.seance_id })
+            .andWhere('seance.start > now()')
+            .getOne();
 
-        console.log(check);
-        if (check) {
-            console.log('already in db');
-            return { status: 400, message: 'User already registered for this seance.' };
-        } else {
-            console.log('not in db');
-
-            const seanceJoined = await this.seanceRepository
-                .createQueryBuilder()
-                .relation(User, 'player_seances')
-                .of(user.id)
-                .add(info.seance_id);
-
-            console.log(seanceJoined);
-
-            // if (seanceJoined) {
-
-            // }
+        if (!seanceExists) {
+            return { status: 404, message: 'Seance does not exist or is already past.' };
         }
-        // 	seanceJoined
-        // 		.then(() => {
-        // 			console.log('seance.then')
-        // 			return { status: 201 }
-        // 		})
-        // 		.catch((err) => {
-        // 			console.log('seance.catch')
-        // 			return { status: 400, message: err }
-        // 		})
-        // })
+
+        console.log('seance exists.');
+
+        const joined = await this.seanceRepository.createQueryBuilder('seance')
+            .leftJoinAndSelect('seance.players', 'players')
+            .where('seance.id = :seance_id', { seance_id: info.seance_id })
+            .getOne();
+
+        if (joined.players.length >= 8) {
+            return { status: 404, message: 'Too many players are already registered for this seance.' };
+        } else if (joined.players.map(u => u.id).indexOf(user.id) > -1) {
+            return { status: 404, message: 'This user already joined the seance.' };
+        }
+
+        console.log('joining seance...');
+
+        const joining = await this.seanceRepository.createQueryBuilder('seance')
+            .relation(User, 'seance_joined')
+            .of(await this.seanceRepository.findOne({ where: { id: info.seance_id } }))
+            .add(user.id);
+
+        if (joining != undefined) {
+            return { status: 404, message: 'Error trying to join the seance.' };
+        }
+
+        return { status: 200, message: 'Seance joined' };
     }
 
     async delete(user, info): Promise<Boolean> {
@@ -93,6 +92,5 @@ export class SeancesService {
         } else {
             return false;
         }
-
     }
 }

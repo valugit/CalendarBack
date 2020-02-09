@@ -32,7 +32,7 @@ Sends back a JWT Token
 Header {Authorization : Bearer <Token>}
 ```
 
-### GET /user/reservation
+### GET /user/reservations
 ```
 Header {Authorization : Bearer <Token>}
 ```
@@ -65,7 +65,7 @@ Header {Authorization : Bearer <Token>}
 }
 ```
 
-### POST /seance/join (unavailable)
+### POST /seance/join
 ```
 Header {Authorization : Bearer <Token>}
 ```
