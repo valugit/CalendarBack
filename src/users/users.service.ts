@@ -63,9 +63,9 @@ export class UsersService {
         } else {
             return await this.userRepository.createQueryBuilder('user')
                 .where('user.id = :number', { number: id })
+                .andWhere('user.role = :role', { role: 'gamemaster' })
                 .getOne();
         }
-
     }
 
     async findGms(): Promise<User[]> {
