@@ -63,8 +63,8 @@ export class SeancesService {
 
         console.log('joining seance...');
 
-        const joining = await this.seanceRepository.createQueryBuilder('seance')
-            .relation(User, 'seance_joined')
+        const joining = await this.seanceRepository.createQueryBuilder()
+            .relation(Seance, 'players')
             .of(await this.seanceRepository.findOne({ where: { id: info.seance_id } }))
             .add(user.id);
 

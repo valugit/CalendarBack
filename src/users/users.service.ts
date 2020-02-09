@@ -90,10 +90,20 @@ export class UsersService {
     }
 
     async findReservations(user: any): Promise<User> {
-        return await this.userRepository
+        var resp = await this.userRepository
             .createQueryBuilder('user')
             .innerJoinAndSelect('user.seance_joined', 'seance')
+            .leftJoinAndSelect('seance.players', 'players')
             .where('user.id = :id', { id: user.id })
             .getOne();
+
+        if (!resp) {
+            resp = await this.userRepository
+                .createQueryBuilder('user')
+                .where('user.id = :id', { id: user.id })
+                .getOne();
+        }
+
+        return resp;
     }
 }

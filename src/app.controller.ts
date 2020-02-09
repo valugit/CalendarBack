@@ -59,7 +59,6 @@ export class AppController {
     joinSeance(@Request() req) {
         // take a reservation
         return this.seancesService.joinSeance(req.user, req.body);
-        // TODO: This almost work
     }
 
     @UseGuards(AuthGuard('jwt'))
