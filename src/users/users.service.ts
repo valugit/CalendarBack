@@ -58,7 +58,14 @@ export class UsersService {
             .andWhere('seance.start > now()')
             .getOne();
 
-        return qb;
+        if (qb) {
+            return qb;
+        } else {
+            return await this.userRepository.createQueryBuilder('user')
+                .where('user.id = :number', { number: id })
+                .andWhere('user.role = :role', { role: 'gamemaster' })
+                .getOne();
+        }
     }
 
     async findGms(): Promise<User[]> {

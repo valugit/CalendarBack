@@ -75,4 +75,24 @@ export class SeancesService {
         // 		})
         // })
     }
+
+    async delete(user, info): Promise<Boolean> {
+        const check = await this.seanceRepository.createQueryBuilder('seance')
+            .where('seance.gamemaster = :user_id', { user_id: user.id })
+            .andWhere('seance.id = :seance_id', { seance_id: info.seance_id })
+            .getOne();
+
+        if (check) {
+            const del = await this.seanceRepository.createQueryBuilder('seance')
+                .delete()
+                .from(Seance)
+                .where("id = :seance_id", { seance_id: info.seance_id })
+                .execute();
+
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }
