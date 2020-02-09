@@ -65,9 +65,15 @@ export class AppController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('gamemaster/:id')
-    getOneGms(@Param() params) {
+    async getOneGms(@Param() params) {
         // get gms disponibilities
-        return this.usersService.findGmSeances(params.id);
+        const resp = await this.usersService.findGmSeances(params.id);
+
+        if (resp) {
+            return resp;
+        } else {
+            return { status: 404, message: 'Resource not found.' };
+        }
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -98,10 +104,16 @@ export class AppController {
 
     @UseGuards(AuthGuard('jwt'))
     @Roles('gamemaster')
-    @Post('seance/remove')
-    async removeSeance(@Body() body) {
-        // remove gamemasters's own disponibility
-        // TODO: return this.seancesService.delete(body);
+    @Post('seance/delete')
+    async deleteSeance(@Request() req) {
+        // delete gamemasters's own disponibility
+        const del = await this.seancesService.delete(req.user, req.body);
+
+        if (del) {
+            return { status: 200 };
+        } else {
+            return { status: 400, message: 'You cannot delete this resource.' };
+        }
     }
 
     // Routes for admin only
