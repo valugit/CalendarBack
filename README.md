@@ -6,6 +6,20 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Initialization
+
+Create a `.env` file by renaming the `.env.dist` and change the database info as necessary.
+You need to create a database beforehand.
+Open a prompt, go in the root folder of the project and type :
+```
+$ npm start
+```
+The tables will be automatically generated, you will now be able to make requests on the following urls.
+
+###### P.S. You may want to manually insert some games into the database before doing anything else (the route /game/add exists but you need to have the role `admin` to access it)
+
+###### P.P.S. The default route is localhost:3001
+
 ## Routes
 
 ### POST /auth/register
