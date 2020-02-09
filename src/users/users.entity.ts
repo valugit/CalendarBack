@@ -26,4 +26,9 @@ export class User {
 
     @OneToMany(type => Seance, seance => seance.gamemaster)
     gm_seances: Seance[];
+
+    @ManyToMany(type => Seance, seance => seance.players, {
+        cascade: ['insert', 'update']
+    })
+    seance_joined: Seance[];
 }

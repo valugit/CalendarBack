@@ -20,7 +20,9 @@ export class Seance {
     @ManyToOne(type => Game, game => game.id)
     seance_game: Game;
 
-    @ManyToMany(type => User)
+    @ManyToMany(type => User, user => user.seance_joined, {
+        cascade: true
+    })
     @JoinTable()
     players: User[];
 

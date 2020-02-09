@@ -51,7 +51,6 @@ export class AppController {
     getReservations(@Request() req) {
         // get users reservation
         return this.usersService.findReservations(req.user);
-        // TODO: Does this work ?
     }
 
     @UseGuards(AuthGuard('jwt'))
@@ -60,7 +59,7 @@ export class AppController {
     joinSeance(@Request() req) {
         // take a reservation
         return this.seancesService.joinSeance(req.user, req.body);
-        // TODO: This does NOT work
+        // TODO: This almost work
     }
 
     @UseGuards(AuthGuard('jwt'))
